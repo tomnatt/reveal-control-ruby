@@ -9,11 +9,11 @@ https://github.com/igrigorik/em-websocket
 and intended for use with the reveal.js presentation forked here:
 https://github.com/tomnatt/reveal.js
 
-**Requires:**
+**Requires:**  
 ruby 1.8.7
 rubygems
 
-**Gems:**
+**Gems:**  
 addressable
 em-websocket
 eventmachine
