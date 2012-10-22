@@ -6,23 +6,44 @@ require 'em-websocket'
 #
 
 EventMachine.run {
-    @channel = EM::Channel.new
 
+    # control channel
+    @controlChannel = EM::Channel.new
     EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080, :debug => true) do |ws|
 
         ws.onopen {
-            sid = @channel.subscribe { |msg| ws.send msg }
-            @channel.push "#{sid} connected!"
+            sid = @controlChannel.subscribe { |msg| ws.send msg }
+            @controlChannel.push "#{sid} connected!"
 
             ws.onmessage { |msg|
                 if msg =~ /^move [up|down|left|right]/ then
                     # send to everyone on this channel
-                    @channel.push "#{msg}"
+                    @controlChannel.push "#{msg}"
                 end
             }
 
             ws.onclose {
-                @channel.unsubscribe(sid)
+                @controlChannel.unsubscribe(sid)
+            }
+        }
+
+    end
+    
+    # chat channel
+    @chatChannel = EM::Channel.new
+    EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8081, :debug => true) do |ws|
+
+        ws.onopen {
+            sid = @chatChannel.subscribe { |msg| ws.send msg }
+            #@chatChannel.push "#{sid} connected!"
+
+            ws.onmessage { |msg|
+                # send to everyone on this channel
+                @chatChannel.push "#{msg}"
+            }
+
+            ws.onclose {
+                @chatChannel.unsubscribe(sid)
             }
         }
 
