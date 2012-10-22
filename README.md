@@ -3,6 +3,9 @@ reveal-control-ruby
 
 Ruby remote controller for my reveal fork, using websockets.
 
+Main file is {{reveal-server.rb}}  
+Interaction files are in the {{reveal}} directory
+
 Written using ruby 1.8.7 and websocket-em:  
 https://github.com/igrigorik/em-websocket
 
